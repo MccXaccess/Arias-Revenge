@@ -246,3 +246,21 @@ Received Import Request.
   path: Assets/DEV_MccXaccess/scene_Access.unity
   artifactKey: Guid(19d2080361bb072679bc5537664681e1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/DEV_MccXaccess/scene_Access.unity using Guid(19d2080361bb072679bc5537664681e1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9e43ee33e2028be1694e439132210d75') in 0.000825 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 154.312586 seconds.
+  path: Assets/Project Packages
+  artifactKey: Guid(094f9341713b7b2b0a5a9266b9c2d8f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Project Packages using Guid(094f9341713b7b2b0a5a9266b9c2d8f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '56df9e0b331a6a854d907e866e896cac') in 0.000944 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 1.491014 seconds.
+  path: Assets/Settings
+  artifactKey: Guid(0220aab0833d04faeb927d84ca6cc40c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Settings using Guid(0220aab0833d04faeb927d84ca6cc40c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd681da83228de6eb57118ec3dd4db8fe') in 0.001131 seconds 
+========================================================================
+Received Import Request.
+  Time since last request: 0.965353 seconds.
+  path: Assets/Scenes
+  artifactKey: Guid(e50b1da7c4baf66f89747821338d7a78) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes using Guid(e50b1da7c4baf66f89747821338d7a78) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6e5a44c10412822d0bd473a943722236') in 0.000614 seconds 
