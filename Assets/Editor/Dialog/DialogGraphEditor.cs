@@ -29,5 +29,4 @@ public class DialogGraphEditor : EditorWindow
         VisualElement labelFromUXML = m_VisualTreeAsset.Instantiate();
         root.Add(labelFromUXML);
     }
-    
 }
