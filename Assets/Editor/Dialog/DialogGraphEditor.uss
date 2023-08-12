@@ -4,3 +4,11 @@ GridBackground {
 	--thick-line-color: rgba(190,190,190, 0.1);
 	--spacing: 15;
 }
+
+#inspector-panel > Label {
+	background-color: rgba(150,150,150,.1);
+}
+
+#graph-view-panel > Label {
+	background-color: rgba(150,150,150,.1);
+}

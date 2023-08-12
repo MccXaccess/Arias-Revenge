@@ -1,14 +1,16 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Editor/Dialog/DialogGraphEditor.uss?fileID=7433441132597879392&amp;guid=42c290c93436f86419d9f4f38ff35706&amp;type=3#DialogGraphEditor" />
-    <uie:Toolbar>
-        <uie:ToolbarMenu tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" text="Asset" />
+    <uie:Toolbar style="display: flex;">
+        <uie:ToolbarMenu tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" text="Assets" />
     </uie:Toolbar>
-    <Editor.Dialog.VisualElements.SplitView fixed-pane-initial-dimension="150" style="flex-direction: column; height: 221px; width: 637px; flex-grow: 1;">
-        <ui:VisualElement style="flex-grow: 1; height: 460px; width: 169px;">
+    <Editor.Dialog.VisualElements.SplitView fixed-pane-initial-dimension="150" name="SplitView" style="flex-grow: 1; display: flex;">
+        <ui:VisualElement name="inspector-panel">
+            <ui:Label tabindex="-1" text="Inspector" parse-escape-sequences="true" display-tooltip-when-elided="true" />
             <Editor.Dialog.VisualElements.InspectorView style="flex-grow: 1;" />
         </ui:VisualElement>
-        <ui:VisualElement style="flex-grow: 1;">
-            <Editor.Dialog.VisualElements.DialogGraphView focusable="true" style="flex-grow: 1; height: -18px;" />
+        <ui:VisualElement name="graph-view-panel" style="flex-grow: 1; flex-shrink: 1;">
+            <ui:Label tabindex="-1" text="Dialog graph" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+            <Editor.Dialog.VisualElements.DialogGraphView focusable="true" style="flex-grow: 1; display: flex;" />
         </ui:VisualElement>
     </Editor.Dialog.VisualElements.SplitView>
 </ui:UXML>

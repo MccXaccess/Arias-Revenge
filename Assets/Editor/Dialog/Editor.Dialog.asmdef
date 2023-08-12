@@ -2,7 +2,8 @@
     "name": "Editor.Dialog",
     "rootNamespace": "",
     "references": [
-        "GUID:18b4fb767b8f81047b7c24fdec94709e"
+        "GUID:18b4fb767b8f81047b7c24fdec94709e",
+        "GUID:d830ef9a3b45a5b46b4c875a8cadd6a0"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
