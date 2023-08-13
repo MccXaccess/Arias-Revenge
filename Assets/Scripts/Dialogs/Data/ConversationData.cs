@@ -18,22 +18,18 @@ namespace Dialogs.Data
         public DialogNodeData RootNode => _rootNode;
         public List<DialogNodeData> DialogNodesData => _dialogNodesData;
 
+#if UNITY_EDITOR
         public void Initialize()
         {
             _dialogNodesData = new List<DialogNodeData>();
-            _rootNode = CreateNode(typeof(DialogNodeData));
+            _rootNode = CreateNodeInner("root");
             AssetDatabase.SaveAssets();
         }
 
-        public DialogNodeData CreateNode(System.Type type)
+        public DialogNodeData CreateNode()
         {
-            var dialogNode = ScriptableObject.CreateInstance<DialogNodeData>();
+            var dialogNode = CreateNodeInner($"node {_dialogNodesData.Count}");
             _dialogNodesData.Add(dialogNode);
-
-            dialogNode.Initialize(System.Guid.NewGuid(), "New Dialog Node Text");
-
-            AssetDatabase.AddObjectToAsset(dialogNode, this);
-            AssetDatabase.SaveAssets();
 
             return dialogNode;
         }
@@ -44,5 +40,34 @@ namespace Dialogs.Data
             AssetDatabase.RemoveObjectFromAsset(dialogNode); 
             AssetDatabase.SaveAssets();
         }
+
+        public void AddConnection(DialogNodeData sourceNode, DialogNodeData targetNode)
+        {
+            if (sourceNode is null || targetNode is null)
+                return;
+            sourceNode.AddConnection(targetNode);
+            AssetDatabase.SaveAssets();
+        }
+
+        public void RemoveConnection(DialogNodeData sourceNode, DialogNodeData targetNode)
+        {
+            if (sourceNode is null || targetNode is null)
+                return;
+            sourceNode.RemoveConnection(targetNode);
+            AssetDatabase.SaveAssets();
+        }
+
+        private DialogNodeData CreateNodeInner(string name)
+        {
+            var dialogNode = ScriptableObject.CreateInstance<DialogNodeData>();
+            dialogNode.name = name;
+            dialogNode.Initialize(GUID.Generate(), "New Dialog Node Text");
+
+            AssetDatabase.AddObjectToAsset(dialogNode, this);
+            AssetDatabase.SaveAssets();
+
+            return dialogNode;
+        }
+#endif
     }   
 }

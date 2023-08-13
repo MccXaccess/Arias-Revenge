@@ -33,6 +33,7 @@ public class DialogGraphEditor : EditorWindow
         // Instantiate UXML
         VisualElement labelFromUXML = m_VisualTreeAsset.Instantiate();
         labelFromUXML.style.flexGrow = 1;
+        labelFromUXML.style.flexShrink = 1;
         root.Add(labelFromUXML);
 
         // Add style sheet
