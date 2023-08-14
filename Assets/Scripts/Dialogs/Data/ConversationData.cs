@@ -10,38 +10,38 @@ namespace Dialogs.Data
     public class ConversationData : ScriptableObject
     {
         [SerializeField]
-        private DialogNodeData _rootNode;
+        private SpeechNodeData _rootNode;
 
         [SerializeField]
-        private List<DialogNodeData> _dialogNodesData;
+        private List<SpeechNodeData> _speechNodes;
 
-        public DialogNodeData RootNode => _rootNode;
-        public List<DialogNodeData> DialogNodesData => _dialogNodesData;
+        public SpeechNodeData RootNode => _rootNode;
+        public List<SpeechNodeData> SpeechNodes => _speechNodes;
 
 #if UNITY_EDITOR
         public void Initialize()
         {
-            _dialogNodesData = new List<DialogNodeData>();
+            _speechNodes = new List<SpeechNodeData>();
             _rootNode = CreateNodeInner("root");
             AssetDatabase.SaveAssets();
         }
 
-        public DialogNodeData CreateNode()
+        public SpeechNodeData CreateNode()
         {
-            var dialogNode = CreateNodeInner($"node {_dialogNodesData.Count}");
-            _dialogNodesData.Add(dialogNode);
+            var dialogNode = CreateNodeInner($"node-{_speechNodes.Count}");
+            _speechNodes.Add(dialogNode);
 
             return dialogNode;
         }
 
-        public void DeleteNode(DialogNodeData dialogNode)
+        public void DeleteNode(SpeechNodeData dialogNode)
         {
-            _dialogNodesData.Remove(_rootNode);
+            _speechNodes.Remove(_rootNode);
             AssetDatabase.RemoveObjectFromAsset(dialogNode); 
             AssetDatabase.SaveAssets();
         }
 
-        public void AddConnection(DialogNodeData sourceNode, DialogNodeData targetNode)
+        public void AddConnection(SpeechNodeData sourceNode, SpeechNodeData targetNode)
         {
             if (sourceNode is null || targetNode is null)
                 return;
@@ -49,7 +49,7 @@ namespace Dialogs.Data
             AssetDatabase.SaveAssets();
         }
 
-        public void RemoveConnection(DialogNodeData sourceNode, DialogNodeData targetNode)
+        public void RemoveConnection(SpeechNodeData sourceNode, SpeechNodeData targetNode)
         {
             if (sourceNode is null || targetNode is null)
                 return;
@@ -57,11 +57,11 @@ namespace Dialogs.Data
             AssetDatabase.SaveAssets();
         }
 
-        private DialogNodeData CreateNodeInner(string name)
+        private SpeechNodeData CreateNodeInner(string name)
         {
-            var dialogNode = ScriptableObject.CreateInstance<DialogNodeData>();
+            var dialogNode = ScriptableObject.CreateInstance<SpeechNodeData>();
             dialogNode.name = name;
-            dialogNode.Initialize(GUID.Generate(), "New Dialog Node Text");
+            dialogNode.Initialize(GUID.Generate());
 
             AssetDatabase.AddObjectToAsset(dialogNode, this);
             AssetDatabase.SaveAssets();

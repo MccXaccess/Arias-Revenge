@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Dialog.VisualElements
@@ -53,34 +52,34 @@ namespace Editor.Dialog.VisualElements
 
             CreateDialogNodeView(_conversation.RootNode);
 
-            for (int i = 0; i < conversation.DialogNodesData.Count; i++)
-                CreateDialogNodeView(conversation.DialogNodesData[i]);
+            for (int i = 0; i < conversation.SpeechNodes.Count; i++)
+                CreateDialogNodeView(conversation.SpeechNodes[i]);
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
             for (int i = 0; i < graphViewChange.elementsToRemove?.Count; i++)
             {
-                var node = graphViewChange.elementsToRemove[i] as DialogNodeView;
+                var node = graphViewChange.elementsToRemove[i] as SpeechNodeView;
                 if (node is not null)
-                    _conversation.DeleteNode(node.DialogNodeData);
+                    _conversation.DeleteNode(node.speechNodeData);
 
                 var edge = graphViewChange.elementsToRemove[i] as Edge;
                 if (edge is not null)
                 {
-                    var outputView = edge.output.node as DialogNodeView;
-                    var inputView = edge.input.node as DialogNodeView;
-                    _conversation.RemoveConnection(outputView.DialogNodeData, inputView.DialogNodeData);
+                    var outputView = edge.output.node as SpeechNodeView;
+                    var inputView = edge.input.node as SpeechNodeView;
+                    _conversation.RemoveConnection(outputView.speechNodeData, inputView.speechNodeData);
                 }
             }
 
             for (int i = 0; i < graphViewChange.edgesToCreate?.Count; i++)
             {
                 var edge = graphViewChange.edgesToCreate[i];
-                var parentView = edge.output.node;
-                var childView = edge.input.node;
+                var parentView = edge.output.node.userData as SpeechNodeData;
+                var childView = edge.input.node.userData as SpeechNodeData;
 
-                _conversation.AddConnection(parentView.userData as DialogNodeData, childView.userData as DialogNodeData);
+                _conversation.AddConnection(parentView, childView);
             }
             return graphViewChange;
         }
@@ -104,14 +103,14 @@ namespace Editor.Dialog.VisualElements
             CreateDialogNodeView(dialogNode);
         }
 
-        private void CreateDialogNodeView(DialogNodeData dialogNode)
+        private void CreateDialogNodeView(SpeechNodeData speechNodeData)
         {
-            var newNodeView = new DialogNodeView(dialogNode);
+            var newNodeView = new SpeechNodeView(speechNodeData);
             AddElement(newNodeView);
 
-            for (int i = 0; i < dialogNode.Children.Count; i++)
+            for (int i = 0; i < speechNodeData.Connections.Count; i++)
             {
-                var child = dialogNode.Children[i];
+                var child = speechNodeData.Connections[i];
                 var childNodeView = GetNodeByGuid(child.GUID.ToString());
 
                 newNodeView.outputContainer.Add(childNodeView.inputContainer[0]);

@@ -3,19 +3,19 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Editor.Dialog.VisualElements
 {
-    internal sealed class DialogNodeView : UnityEditor.Experimental.GraphView.Node
+    internal sealed class SpeechNodeView : Node
     {
-        private DialogNodeData _dialogNodeData;
+        private SpeechNodeData _speechNodeData;
         private Port _inputPort;
         private Port _outputPort;
 
-        public DialogNodeData DialogNodeData => _dialogNodeData;
+        public SpeechNodeData speechNodeData => _speechNodeData;
 
-        public DialogNodeView(DialogNodeData dialogNodeData)
+        public SpeechNodeView(SpeechNodeData speechNodeData)
         {
-            _dialogNodeData = dialogNodeData; 
-            title = _dialogNodeData.Text;
-            viewDataKey = _dialogNodeData.GUID.ToString();
+            _speechNodeData = speechNodeData; 
+            title = _speechNodeData.Text;
+            viewDataKey = _speechNodeData.GUID.ToString();
 
             CreateInputPort();
             CreateOutputPort();
