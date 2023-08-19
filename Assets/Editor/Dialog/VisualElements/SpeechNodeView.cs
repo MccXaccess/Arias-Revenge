@@ -10,6 +10,9 @@ namespace Editor.Dialog.VisualElements
         private Port _inputPort;
         private Port _outputPort;
 
+        public Port InputPort => _inputPort;
+        public Port OutputPort => _outputPort;
+
         public SpeechNodeData speechNodeData => _speechNodeData;
 
         public SpeechNodeView(SpeechNodeData speechNodeData)

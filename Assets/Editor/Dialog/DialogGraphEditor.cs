@@ -48,7 +48,10 @@ public class DialogGraphEditor : EditorWindow
     {
         var conversation = Selection.activeObject as ConversationData;
         if (conversation is null)
+        {
+            _dialogGraphView.ClearView();
             return;
+        }
         _dialogGraphView.PopulateView(conversation);
     }
 }

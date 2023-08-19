@@ -1,8 +1,11 @@
 using Dialogs.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Editor.Dialog.VisualElements
@@ -50,27 +53,27 @@ namespace Editor.Dialog.VisualElements
             if (_conversation.RootNode == null)
                 _conversation.Initialize();
 
-            CreateDialogNodeView(_conversation.RootNode);
+            CreateDialogViewNodes(conversation);
+            CreateDialogNodeEdges(conversation);
+        }
 
-            for (int i = 0; i < conversation.SpeechNodes.Count; i++)
-                CreateDialogNodeView(conversation.SpeechNodes[i]);
+        internal void ClearView()
+        {
+            _conversation = null;
+            graphViewChanged -= OnGraphViewChanged;
+            DeleteElements(graphElements);
+            graphViewChanged += OnGraphViewChanged;
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
+            // Remove Nodes
             for (int i = 0; i < graphViewChange.elementsToRemove?.Count; i++)
             {
-                // Remove Nodes
                 var node = graphViewChange.elementsToRemove[i] as SpeechNodeView;
                 if (node is not null)
-                {
-                    if (node.speechNodeData.IsRootNode is true)
-                        graphViewChange.elementsToRemove.Remove(node);
-                    else
-                        _conversation.DeleteNode(node.speechNodeData);
-                }
-
-                // Remove Edges
+                    _conversation.DeleteNode(node.speechNodeData);
+                
                 var edge = graphViewChange.elementsToRemove[i] as Edge;
                 if (edge is not null)
                 {
@@ -84,10 +87,9 @@ namespace Editor.Dialog.VisualElements
             for (int i = 0; i < graphViewChange.edgesToCreate?.Count; i++)
             {
                 var edge = graphViewChange.edgesToCreate[i];
-                var parentView = edge.output.node.userData as SpeechNodeData;
-                var childView = edge.input.node.userData as SpeechNodeData;
-
-                _conversation.AddConnection(parentView, childView);
+                var parentView = edge.output.node as SpeechNodeView;
+                var childView = edge.input.node as SpeechNodeView;
+                _conversation.AddConnection(parentView.speechNodeData, childView.speechNodeData);
             }
             return graphViewChange;
         }
@@ -117,17 +119,40 @@ namespace Editor.Dialog.VisualElements
             GridBackground.viewDataKey = _conversation.RootNode.GUID.ToString();
         }
 
+        private void CreateDialogViewNodes(ConversationData conversation)
+        {
+            CreateDialogNodeView(conversation.RootNode);
+            for (int i = 0; i < conversation.SpeechNodes.Count; i++)
+                CreateDialogNodeView(conversation.SpeechNodes[i]);
+        }
+
         private void CreateDialogNodeView(SpeechNodeData speechNodeData)
         {
             var newNodeView = new SpeechNodeView(speechNodeData);
             AddElement(newNodeView);
+        }
 
-            for (int i = 0; i < speechNodeData?.Connections?.Count; i++)
+        private void CreateDialogNodeEdges(ConversationData conversation)
+        {
+            CreateDialogNodeEdge(conversation.RootNode);
+
+            for (int i = 0; i < conversation.SpeechNodes.Count; i++)
+            {
+                var speechNodeData = conversation.SpeechNodes[i];
+                CreateDialogNodeEdge(speechNodeData);
+            }
+        }
+
+        private void CreateDialogNodeEdge(SpeechNodeData speechNodeData)
+        {
+            var parentNodeView = GetNodeByGuid(speechNodeData.GUID.ToString()) as SpeechNodeView;
+
+            for (int i = 0; i < speechNodeData.Connections?.Count; i++)
             {
                 var child = speechNodeData.Connections[i];
-                var childNodeView = GetNodeByGuid(child.GUID.ToString());
-
-                newNodeView.outputContainer.Add(childNodeView.inputContainer[0]);
+                var childNodeView = GetNodeByGuid(child.GUID.ToString()) as SpeechNodeView;
+                var newEdge = parentNodeView.OutputPort.ConnectTo(childNodeView.InputPort);
+                AddElement(newEdge);
             }
         }
     }
