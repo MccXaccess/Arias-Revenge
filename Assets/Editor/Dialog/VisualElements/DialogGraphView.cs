@@ -60,10 +60,17 @@ namespace Editor.Dialog.VisualElements
         {
             for (int i = 0; i < graphViewChange.elementsToRemove?.Count; i++)
             {
+                // Remove Nodes
                 var node = graphViewChange.elementsToRemove[i] as SpeechNodeView;
                 if (node is not null)
-                    _conversation.DeleteNode(node.speechNodeData);
+                {
+                    if (node.speechNodeData.IsRootNode is true)
+                        graphViewChange.elementsToRemove.Remove(node);
+                    else
+                        _conversation.DeleteNode(node.speechNodeData);
+                }
 
+                // Remove Edges
                 var edge = graphViewChange.elementsToRemove[i] as Edge;
                 if (edge is not null)
                 {
@@ -73,6 +80,7 @@ namespace Editor.Dialog.VisualElements
                 }
             }
 
+            // Create node edges
             for (int i = 0; i < graphViewChange.edgesToCreate?.Count; i++)
             {
                 var edge = graphViewChange.edgesToCreate[i];
@@ -87,6 +95,7 @@ namespace Editor.Dialog.VisualElements
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             evt.menu.AppendAction("Add Dialog Node", (a) => AddDialogNode());
+            evt.menu.AppendAction("Focus Root Node", (a) => FocusRootNode());
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -103,12 +112,17 @@ namespace Editor.Dialog.VisualElements
             CreateDialogNodeView(dialogNode);
         }
 
+        private void FocusRootNode()
+        {
+            GridBackground.viewDataKey = _conversation.RootNode.GUID.ToString();
+        }
+
         private void CreateDialogNodeView(SpeechNodeData speechNodeData)
         {
             var newNodeView = new SpeechNodeView(speechNodeData);
             AddElement(newNodeView);
 
-            for (int i = 0; i < speechNodeData.Connections.Count; i++)
+            for (int i = 0; i < speechNodeData?.Connections?.Count; i++)
             {
                 var child = speechNodeData.Connections[i];
                 var childNodeView = GetNodeByGuid(child.GUID.ToString());

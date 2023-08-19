@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Unity.Collections;
 
 namespace Dialogs.Data
 {
@@ -9,9 +10,11 @@ namespace Dialogs.Data
         menuName = "Dialog/Conversation")]
     public class ConversationData : ScriptableObject
     {
+        [ReadOnly]
         [SerializeField]
         private SpeechNodeData _rootNode;
 
+        [ReadOnly]
         [SerializeField]
         private List<SpeechNodeData> _speechNodes;
 
@@ -22,7 +25,7 @@ namespace Dialogs.Data
         public void Initialize()
         {
             _speechNodes = new List<SpeechNodeData>();
-            _rootNode = CreateNodeInner("root");
+            _rootNode = CreateNodeInner("root", true);
             AssetDatabase.SaveAssets();
         }
 
@@ -57,11 +60,15 @@ namespace Dialogs.Data
             AssetDatabase.SaveAssets();
         }
 
-        private SpeechNodeData CreateNodeInner(string name)
+        private SpeechNodeData CreateNodeInner(string name, bool isRoot = false)
         {
             var dialogNode = ScriptableObject.CreateInstance<SpeechNodeData>();
             dialogNode.name = name;
             dialogNode.Initialize(GUID.Generate());
+            dialogNode.SetNodeTitle(name);
+
+            if(isRoot is true)
+                dialogNode.SetRootNode(true);
 
             AssetDatabase.AddObjectToAsset(dialogNode, this);
             AssetDatabase.SaveAssets();

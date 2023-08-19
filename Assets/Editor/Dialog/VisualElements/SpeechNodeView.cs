@@ -1,5 +1,6 @@
 using Dialogs.Data;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 
 namespace Editor.Dialog.VisualElements
 {
@@ -14,11 +15,22 @@ namespace Editor.Dialog.VisualElements
         public SpeechNodeView(SpeechNodeData speechNodeData)
         {
             _speechNodeData = speechNodeData; 
-            title = _speechNodeData.Text;
+            title = _speechNodeData.NodeTitle;
             viewDataKey = _speechNodeData.GUID.ToString();
+            
+            style.left = _speechNodeData.NodeViewPosition.x;
+            style.top = _speechNodeData.NodeViewPosition.y;
 
-            CreateInputPort();
+            //_speechNodeData.SetNodePosition()
+            if(_speechNodeData.IsRootNode is false)
+                CreateInputPort();
             CreateOutputPort();
+        }
+
+        public override void SetPosition(Rect newPos)
+        {
+            base.SetPosition(newPos);
+            _speechNodeData.SetNodePosition(newPos.position);
         }
 
         private void CreateInputPort()
