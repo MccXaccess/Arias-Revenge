@@ -3,7 +3,7 @@
     <uie:Toolbar style="display: flex;">
         <uie:ToolbarMenu tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" text="Assets" />
     </uie:Toolbar>
-    <Editor.Dialog.VisualElements.SplitView fixed-pane-initial-dimension="150" name="SplitView" style="flex-grow: 1; display: flex;">
+    <Editor.Dialog.VisualElements.SplitView fixed-pane-initial-dimension="300" name="SplitView" style="flex-grow: 1; display: flex;">
         <ui:VisualElement name="inspector-panel">
             <ui:Label tabindex="-1" text="Inspector" parse-escape-sequences="true" display-tooltip-when-elided="true" />
             <Editor.Dialog.VisualElements.InspectorView style="flex-grow: 1;" />

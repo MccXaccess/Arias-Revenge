@@ -1,4 +1,5 @@
 using Dialogs.Data;
+using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace Editor.Dialog.VisualElements
 {
     internal sealed class SpeechNodeView : Node
     {
+        public Action<SpeechNodeView> onSelect;
+
         private SpeechNodeData _speechNodeData;
         private Port _inputPort;
         private Port _outputPort;
@@ -34,6 +37,12 @@ namespace Editor.Dialog.VisualElements
         {
             base.SetPosition(newPos);
             _speechNodeData.SetNodePosition(newPos.position);
+        }
+
+        public override void OnSelected()
+        {
+            base.OnSelected();
+            onSelect?.Invoke(this);
         }
 
         private void CreateInputPort()

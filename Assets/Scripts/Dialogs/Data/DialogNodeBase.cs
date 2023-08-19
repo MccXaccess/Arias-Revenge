@@ -5,6 +5,7 @@ namespace Dialogs.Data
 {
     public abstract class DialogNodeBase : ScriptableObject
     {
+        [HideInInspector]
         [SerializeField]
         private GUID _guid;
 

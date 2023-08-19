@@ -18,23 +18,19 @@ public class DialogGraphEditor : EditorWindow
         DialogGraphEditor wnd = GetWindow<DialogGraphEditor>();
         wnd.titleContent = new GUIContent("Dialog Graph Editor");
     }
-    
+
     public void CreateGUI()
     {
         // Each editor window contains a root VisualElement object
         VisualElement root = rootVisualElement;
 
-        /*
-        // VisualElements objects can contain other VisualElement following a tree hierarchy.
-        VisualElement label = new Label("Hello World! From C#");
-        root.Add(label);
-        */
-
         // Instantiate UXML
+
         VisualElement labelFromUXML = m_VisualTreeAsset.Instantiate();
         labelFromUXML.style.flexGrow = 1;
         labelFromUXML.style.flexShrink = 1;
         root.Add(labelFromUXML);
+
 
         // Add style sheet
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Editor/Dialog/DialogGraphEditor.uss");
@@ -42,6 +38,8 @@ public class DialogGraphEditor : EditorWindow
 
         _dialogGraphView = root.Q<DialogGraphView>();
         _inspectorView = root.Q<InspectorView>();
+
+        _dialogGraphView.SetInspectorView(_inspectorView);
     }
 
     private void OnSelectionChange()
@@ -50,6 +48,7 @@ public class DialogGraphEditor : EditorWindow
         if (conversation is null)
         {
             _dialogGraphView.ClearView();
+            _inspectorView.ClearView();
             return;
         }
         _dialogGraphView.PopulateView(conversation);

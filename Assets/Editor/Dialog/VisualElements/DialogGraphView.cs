@@ -1,11 +1,8 @@
 using Dialogs.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Editor.Dialog.VisualElements
@@ -17,6 +14,7 @@ namespace Editor.Dialog.VisualElements
         public GridBackground GridBackground { get; private set; }
 
         private ConversationData _conversation;
+        private InspectorView _inspectorView;
 
         public DialogGraphView()
         {
@@ -27,6 +25,13 @@ namespace Editor.Dialog.VisualElements
             GridBackground = new GridBackground();
             GridBackground.StretchToParentWidth();
             Insert(0, GridBackground);
+
+            //_inspectorView = parent.Q<InspectorView>();
+        }
+
+        public void SetInspectorView(InspectorView inspectorView)
+        {
+            _inspectorView = inspectorView;
         }
 
         private void AddStyleSheets()
@@ -129,6 +134,7 @@ namespace Editor.Dialog.VisualElements
         private void CreateDialogNodeView(SpeechNodeData speechNodeData)
         {
             var newNodeView = new SpeechNodeView(speechNodeData);
+            newNodeView.onSelect += _inspectorView.OnSpeechNodeSelected;
             AddElement(newNodeView);
         }
 

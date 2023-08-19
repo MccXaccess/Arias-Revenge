@@ -18,6 +18,7 @@ namespace Dialogs.Data
         [SerializeField]
         private PositionType _positionType;
 
+        [HideInInspector]
         [SerializeField]
         private List<SpeechNodeData> _connections;
 
