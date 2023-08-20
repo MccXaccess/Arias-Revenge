@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Unity.Collections;
+using System;
 
 namespace Dialogs.Data
 {
@@ -38,6 +39,7 @@ namespace Dialogs.Data
         {
             var dialogNode = CreateNodeInner($"node-{_speechNodes.Count}");
             _speechNodes.Add(dialogNode);
+            AssetDatabase.SaveAssets();
 
             return dialogNode;
         }

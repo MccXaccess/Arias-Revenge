@@ -7,7 +7,7 @@ namespace Dialogs.Data
     {
         [HideInInspector]
         [SerializeField]
-        private GUID _guid;
+        private string _guid;
 
         [HideInInspector]
         [SerializeField]
@@ -22,14 +22,14 @@ namespace Dialogs.Data
         private bool _isRootNode;
 
 #if UNITY_EDITOR
-        public GUID GUID => _guid;    
+        public string GUID => _guid;    
         public string NodeTitle => _nodeTitle;
         public Vector2 NodeViewPosition => _nodeViewPosition;
         public bool IsRootNode => _isRootNode;
 
         public virtual void Initialize(GUID guid)
         {
-            _guid = guid;
+            _guid = guid.ToString();
             AssetDatabase.SaveAssets();
         }
 
