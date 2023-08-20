@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Editor.Dialog.VisualElements
@@ -72,13 +73,27 @@ namespace Editor.Dialog.VisualElements
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange)
         {
+            int elementToRemoveCount = graphViewChange.elementsToRemove ? .Count ?? 0;
             // Remove Nodes
-            for (int i = 0; i < graphViewChange.elementsToRemove?.Count; i++)
+            for (int i = elementToRemoveCount - 1; i >= 0; i--)
             {
-                var node = graphViewChange.elementsToRemove[i] as SpeechNodeView;
-                if (node is not null)
-                    _conversation.DeleteNode(node.speechNodeData);
-                
+                switch (graphViewChange.elementsToRemove[i])
+                {
+                    case RootSpeechNodeView rootSpeechNodeView:
+                        graphViewChange.elementsToRemove.RemoveAt(i);
+                        break;
+                    case SpeechNodeView speechNodeView:
+                        _conversation.DeleteNode(speechNodeView.speechNodeData);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // Remove Edges
+            elementToRemoveCount = graphViewChange.elementsToRemove?.Count ?? 0;
+            for (int i = elementToRemoveCount - 1; i >= 0; i--)
+            {
                 var edge = graphViewChange.elementsToRemove[i] as Edge;
                 if (edge is not null)
                 {
@@ -126,7 +141,7 @@ namespace Editor.Dialog.VisualElements
 
         private void CreateDialogViewNodes(ConversationData conversation)
         {
-            CreateDialogNodeView(conversation.RootNode);
+            CreateDialogRootNode(conversation.RootNode);
             for (int i = 0; i < conversation.SpeechNodes.Count; i++)
                 CreateDialogNodeView(conversation.SpeechNodes[i]);
         }
@@ -134,6 +149,16 @@ namespace Editor.Dialog.VisualElements
         private void CreateDialogNodeView(SpeechNodeData speechNodeData)
         {
             var newNodeView = new SpeechNodeView(speechNodeData);
+            newNodeView.onSelect += _inspectorView.OnSpeechNodeSelected;
+            AddElement(newNodeView);
+        }
+
+        private void CreateDialogRootNode(SpeechNodeData rootSpeechNodeView)
+        {
+            if (rootSpeechNodeView.IsRootNode is false)
+                throw new System.Exception($"{rootSpeechNodeView} is not a root node.");
+
+            var newNodeView = new RootSpeechNodeView(rootSpeechNodeView);
             newNodeView.onSelect += _inspectorView.OnSpeechNodeSelected;
             AddElement(newNodeView);
         }

@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace Editor.Dialog.VisualElements
 {
-    internal sealed class SpeechNodeView : Node
+    internal class SpeechNodeView : Node
     {
         public Action<SpeechNodeView> onSelect;
 
         private SpeechNodeData _speechNodeData;
-        private Port _inputPort;
-        private Port _outputPort;
+        protected Port _inputPort;
+        protected Port _outputPort;
 
         public Port InputPort => _inputPort;
         public Port OutputPort => _outputPort;
@@ -27,10 +27,7 @@ namespace Editor.Dialog.VisualElements
             style.left = _speechNodeData.NodeViewPosition.x;
             style.top = _speechNodeData.NodeViewPosition.y;
 
-            //_speechNodeData.SetNodePosition()
-            if(_speechNodeData.IsRootNode is false)
-                CreateInputPort();
-            CreateOutputPort();
+            CreateGraphNodePorts();
         }
 
         public override void SetPosition(Rect newPos)
@@ -44,19 +41,16 @@ namespace Editor.Dialog.VisualElements
             base.OnSelected();
             onSelect?.Invoke(this);
         }
-
-        private void CreateInputPort()
-        {
-            _inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
-            _inputPort.portName = "Input";
-            inputContainer.Add(_inputPort);
-        }
-
-        private void CreateOutputPort()
+        
+        protected virtual void CreateGraphNodePorts()
         {
             _outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(float));
             _outputPort.portName = "Output";
             outputContainer.Add(_outputPort);
+
+            _inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
+            _inputPort.portName = "Input";
+            inputContainer.Add(_inputPort);
         }
     }
 }
