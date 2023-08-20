@@ -1,6 +1,8 @@
 using Dialogs.Data;
 using Editor.Dialog.VisualElements;
+using System.Runtime.CompilerServices;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,10 +15,10 @@ public class DialogGraphEditor : EditorWindow
     private VisualTreeAsset m_VisualTreeAsset = default;
 
     [MenuItem("Dialog Graph Editor/Editor...")]
-    public static void ShowExample()
+    public static void ShowDialogEditor()
     {
-        DialogGraphEditor wnd = GetWindow<DialogGraphEditor>();
-        wnd.titleContent = new GUIContent("Dialog Graph Editor");
+        DialogGraphEditor dialogeditor = GetWindow<DialogGraphEditor>();
+        dialogeditor.titleContent = new GUIContent("Dialog Graph Editor");
     }
 
     public void CreateGUI()
@@ -44,13 +46,39 @@ public class DialogGraphEditor : EditorWindow
 
     private void OnSelectionChange()
     {
-        var conversation = Selection.activeObject as ConversationData;
-        if (conversation is null)
+        switch (Selection.activeObject)
         {
-            _dialogGraphView.ClearView();
-            _inspectorView.ClearView();
-            return;
+            case ConversationData conversation:
+                _dialogGraphView.PopulateView(conversation);
+                break;
+            case SpeechNodeData speechNode:
+                break;
+            default:
+                _dialogGraphView.ClearView();
+                _inspectorView.ClearView();
+                break;
         }
+    }
+
+    private void LoadFromData(ConversationData conversation)
+    {
         _dialogGraphView.PopulateView(conversation);
+    }
+
+    [OnOpenAsset]
+    private static bool OnOpenAsset(int instanceID, int line)
+    {
+        string assetPath = AssetDatabase.GetAssetPath(instanceID);
+        var conversation = AssetDatabase.LoadAssetAtPath<ConversationData>(assetPath);
+
+        if(conversation is not null)
+        {
+            DialogGraphEditor dialogEditor = GetWindow<DialogGraphEditor>();
+            dialogEditor.titleContent = new GUIContent("Dialog Graph Editor");
+            dialogEditor.LoadFromData(conversation);
+            return true;
+        }
+
+        return false;
     }
 }
