@@ -1,22 +1,24 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Editor/Dialog/DialogNodeView.uss?fileID=7433441132597879392&amp;guid=4f8fb1b7844837546a22ef4816c6a8fc&amp;type=3#DialogNodeView" />
     <ui:VisualElement name="node-border">
-        <ui:VisualElement name="contents">
+        <ui:VisualElement name="contents" style="padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
             <ui:VisualElement name="divider" class="horizontal" />
             <ui:VisualElement name="top">
                 <ui:VisualElement name="input" style="align-self: center;" />
                 <ui:VisualElement name="title">
-                    <ui:Label name="title-label" text="node-0" class="unity-text-element unity-label" style="color: rgb(221, 221, 221);" />
+                    <ui:Label name="title-label" text="node-0" class="unity-text-element unity-label" style="color: rgb(221, 221, 221); font-size: 18px; -unity-font-style: bold;" />
                     <ui:VisualElement name="title-button-container">
                         <ui:VisualElement name="collapse-button">
                             <ui:VisualElement name="icon" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
+                <ui:VisualElement name="protrait" style="flex-grow: 1; width: 75px; height: 75px; background-image: url(&apos;project://database/Assets/Editor/Dialog/Images/not-found-image.png?fileID=2800000&amp;guid=13ec56b0e96409a44a5394a0d26c5058&amp;type=3#not-found-image&apos;); align-self: flex-start;" />
+                <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="speech" style="color: rgb(236, 236, 236); min-height: 50px; font-size: 18px;" />
                 <ui:VisualElement name="divider" class="vertical" />
                 <ui:VisualElement name="output" style="align-self: center;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-    <ui:VisualElement name="selection-border" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+    <ui:VisualElement name="selection-border" picking-mode="Ignore" focusable="false" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
 </ui:UXML>

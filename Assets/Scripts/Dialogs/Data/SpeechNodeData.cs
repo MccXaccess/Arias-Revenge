@@ -13,6 +13,9 @@ namespace Dialogs.Data
         private string _text;
 
         [SerializeField]
+        private Sprite _speakerSprite;
+
+        [SerializeField]
         private AudioClip _audioClip;
 
         [SerializeField]
@@ -24,6 +27,7 @@ namespace Dialogs.Data
 
         public string SpeakerName => _speakerName;
         public string Text => _text;
+        public Sprite SpeakerSprite => _speakerSprite;
         public AudioClip AudioClip => _audioClip;
         public PositionType NarratorPosition => _positionType;
         public List<SpeechNodeData> Connections => _connections;
