@@ -1,5 +1,6 @@
 using Dialogs.Data;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
 
 namespace Editor.Dialog.VisualElements
 {
@@ -11,8 +12,9 @@ namespace Editor.Dialog.VisualElements
 
         protected override void CreateGraphNodePorts()
         {
-            _outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(float));
-            _outputPort.portName = "Output";
+            _outputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Multi, typeof(float));
+            _outputPort.portName = "";
+            _outputPort.style.flexDirection = FlexDirection.ColumnReverse;
             outputContainer.Add(_outputPort);
         }
     }

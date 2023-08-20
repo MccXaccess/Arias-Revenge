@@ -2,6 +2,7 @@ using Dialogs.Data;
 using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Editor.Dialog.VisualElements
 {
@@ -18,7 +19,7 @@ namespace Editor.Dialog.VisualElements
 
         public SpeechNodeData speechNodeData => _speechNodeData;
 
-        public SpeechNodeView(SpeechNodeData speechNodeData)
+        public SpeechNodeView(SpeechNodeData speechNodeData) : base("Assets/Editor/Dialog/DialogNodeView.uxml")
         {
             _speechNodeData = speechNodeData; 
             title = _speechNodeData.NodeTitle;
@@ -44,13 +45,15 @@ namespace Editor.Dialog.VisualElements
         
         protected virtual void CreateGraphNodePorts()
         {
-            _outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Multi, typeof(float));
-            _outputPort.portName = "Output";
-            outputContainer.Add(_outputPort);
-
-            _inputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
-            _inputPort.portName = "Input";
+            _inputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Multi, typeof(float));
+            _inputPort.portName = "";
+            _inputPort.style.flexDirection = FlexDirection.Column;
             inputContainer.Add(_inputPort);
+
+            _outputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Multi, typeof(float));
+            _outputPort.portName = "";
+            _outputPort.style.flexDirection = FlexDirection.ColumnReverse;
+            outputContainer.Add(_outputPort);
         }
     }
 }
